@@ -1,11 +1,13 @@
 package route
 
 import (
+	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/controller"
 	"github.com/gofiber/fiber/v2"
 )
 
 type RouteConfig struct {
-	App *fiber.App
+	App            *fiber.App
+	AuthController *controller.AuthController
 }
 
 func Router(config *RouteConfig) {
