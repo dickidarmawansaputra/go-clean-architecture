@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/entity"
+	"github.com/dickidarmawansaputra/go-clean-architecture/internal/exception"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/lib/password"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/model"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/repository"
@@ -29,12 +30,12 @@ func NewAuthUseCase(config *viper.Viper, db *gorm.DB, validate *validator.Valida
 	}
 }
 
-func (u *AuthUseCase) Register(ctx *fiber.Ctx, request *model.RegisterRequest) (*entity.User, error) {
+func (u *AuthUseCase) Register(ctx *fiber.Ctx, request *model.RegisterRequest) (*model.UserResponse, error) {
 	tx := u.DB.Begin()
 	defer tx.Rollback()
 
 	if err := u.Validate.Struct(request); err != nil {
-		return nil, err
+		return nil, exception.Validate(fiber.ErrBadRequest, err)
 	}
 
 	user := &entity.User{
@@ -46,23 +47,23 @@ func (u *AuthUseCase) Register(ctx *fiber.Ctx, request *model.RegisterRequest) (
 
 	userExists := u.UserRepository.CheckUserExists(tx, ctx, user, request.Email)
 	if userExists {
-		return nil, fiber.NewError(fiber.StatusConflict, "User already exist")
+		return nil, exception.Error(fiber.ErrConflict, "User already exists")
 	}
 
 	hashedPassword, err := password.Hash(user.Password)
 	if err != nil {
-		return nil, err
+		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
 	}
 
 	user.Password = hashedPassword
 
 	if err := u.UserRepository.Create(tx, ctx, user); err != nil {
-		return nil, err
+		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
 	}
 
 	if err := tx.Commit().Error; err != nil {
-		return nil, err
+		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
 	}
 
-	return user, nil
+	return model.UserResource(user), nil
 }
