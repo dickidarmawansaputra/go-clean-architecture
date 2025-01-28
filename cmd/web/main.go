@@ -33,7 +33,7 @@ func main() {
 		Config:   cfg,
 		DB:       config.NewDatabase(cfg, log),
 		Validate: config.NewValidator(),
-		Swagger:  config.NewSwagger(cfg),
+		Swagger:  config.NewSwagger(),
 	})
 
 	gracefulShutdown(ctx, app, cfg, log)
