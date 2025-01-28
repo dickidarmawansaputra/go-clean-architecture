@@ -5,6 +5,7 @@ import (
 
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/entity"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/exception"
+	"github.com/dickidarmawansaputra/go-clean-architecture/internal/lib/jwt"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/lib/password"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/model"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/repository"
@@ -45,8 +46,7 @@ func (u *AuthUseCase) Register(ctx *fiber.Ctx, request *model.RegisterRequest) (
 		Photo:    fmt.Sprintf("https://ui-avatars.com/api/?name=%s", request.Name),
 	}
 
-	userExists := u.UserRepository.CheckUserExists(tx, ctx, user, request.Email)
-	if userExists {
+	if userExists := u.UserRepository.CheckUserExists(tx, ctx, user, request.Email); userExists {
 		return nil, exception.Error(fiber.ErrConflict, "User already exists")
 	}
 
@@ -66,4 +66,37 @@ func (u *AuthUseCase) Register(ctx *fiber.Ctx, request *model.RegisterRequest) (
 	}
 
 	return model.UserResource(user), nil
+}
+
+func (u *AuthUseCase) Login(ctx *fiber.Ctx, request *model.LoginRequest) (*model.AuthResponse, error) {
+	tx := u.DB.Begin()
+	defer tx.Rollback()
+
+	if err := u.Validate.Struct(request); err != nil {
+		return nil, exception.Validate(fiber.ErrUnprocessableEntity, err)
+	}
+
+	user := &entity.User{
+		Email:    request.Email,
+		Password: request.Password,
+	}
+
+	if err := u.UserRepository.FindUserByEmail(tx, ctx, user, request.Email); err != nil {
+		return nil, exception.Error(fiber.ErrUnauthorized, "Incorrect user credentials")
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
+	}
+
+	if err := password.Verify(user.Password, request.Password); err != nil {
+		return nil, exception.Error(fiber.ErrUnauthorized, "Incorrect password")
+	}
+
+	token, err := jwt.Generate(u.Config, &jwt.TokenPayload{ID: user.ID})
+	if err != nil {
+		return nil, exception.Error(fiber.ErrUnauthorized, err.Error())
+	}
+
+	return &model.AuthResponse{Token: token}, nil
 }
