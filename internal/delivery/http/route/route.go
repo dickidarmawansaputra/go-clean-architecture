@@ -3,6 +3,9 @@ package route
 import (
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/controller"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/healthcheck"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
 )
 
@@ -13,7 +16,7 @@ type RouteConfig struct {
 }
 
 func Router(config *RouteConfig) {
-	route := config.App.Group("/api")
+	route := config.App.Group("/api").Use(recover.New(), cors.New(), healthcheck.New())
 
 	config.UnprotectedRoute(route)
 	config.ProtectedRoute(route)
