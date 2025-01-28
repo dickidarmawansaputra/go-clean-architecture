@@ -22,7 +22,7 @@ func NewAuthController(useCase *usecase.AuthUseCase) *AuthController {
 // @Tags         Auth
 // @Accept       json
 // @Produce      json
-// @Param request body model.RegisterRequest true "request body"
+// @Param request body model.RegisterRequest true "Request Body"
 // @Success 201 {object} model.UserResponse{}
 // @Failure 400 {object} model.Response{}
 // @Failure 409 {object} model.Response{}
@@ -44,6 +44,18 @@ func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	return model.WebResponse(ctx, model.StatusCreated, response)
 }
 
+// @Summary      Login user
+// @Description  Login user to create JWT Token
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param request body model.LoginRequest true "Request Body"
+// @Success 200 {object} model.AuthResponse{}
+// @Failure 400 {object} model.Response{}
+// @Failure 422 {object} model.Response{}
+// @Failure 401 {object} model.Response{}
+// @Failure 500 {object} model.Response{}
+// @Router       /api/auth/login [post]
 func (c *AuthController) Login(ctx *fiber.Ctx) error {
 	request := new(model.LoginRequest)
 
