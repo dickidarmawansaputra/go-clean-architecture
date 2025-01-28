@@ -1,4 +1,74 @@
 basePath: /
+definitions:
+  model.MetaPagination:
+    properties:
+      pagination:
+        $ref: '#/definitions/model.PaginationMetaData'
+    type: object
+  model.PaginationLink:
+    properties:
+      next_page:
+        type: string
+      previous_page:
+        type: string
+    type: object
+  model.PaginationMetaData:
+    properties:
+      count:
+        type: integer
+      current_page:
+        type: integer
+      links:
+        $ref: '#/definitions/model.PaginationLink'
+      per_page:
+        type: integer
+      total:
+        type: integer
+      total_page:
+        type: integer
+    type: object
+  model.RegisterRequest:
+    properties:
+      email:
+        maxLength: 100
+        type: string
+      name:
+        maxLength: 100
+        type: string
+      password:
+        maxLength: 255
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  model.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      errors: {}
+      meta:
+        $ref: '#/definitions/model.MetaPagination'
+      status:
+        type: string
+    type: object
+  model.UserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      photo:
+        type: string
+      updated_at:
+        type: string
+    type: object
 host: localhost:3000
 info:
   contact:
@@ -11,5 +81,43 @@ info:
   termsOfService: http://swagger.io/terms/
   title: Go Clean Architecture With Fiber
   version: 1.0.0
-paths: {}
+paths:
+  /api/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register user to create account
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/model.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Register user
+      tags:
+      - Auth
 swagger: "2.0"

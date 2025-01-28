@@ -17,6 +17,18 @@ func NewAuthController(useCase *usecase.AuthUseCase) *AuthController {
 	}
 }
 
+// @Summary      Register user
+// @Description  Register user to create account
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param request body model.RegisterRequest true "request body"
+// @Success 201 {object} model.UserResponse{}
+// @Failure 400 {object} model.Response{}
+// @Failure 409 {object} model.Response{}
+// @Failure 422 {object} model.Response{}
+// @Failure 500 {object} model.Response{}
+// @Router       /api/auth/register [post]
 func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	request := new(model.RegisterRequest)
 
