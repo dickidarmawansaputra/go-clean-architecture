@@ -1,0 +1,56 @@
+{"level":"trace","msg":"User already exists","time":"2025-01-28T19:39:34+07:00"}
+{"level":"trace","msg":"invalid character '}' looking for beginning of object key string","time":"2025-01-28T19:39:41+07:00"}
+{"level":"trace","msg":"[map[Password:Password is required]]","time":"2025-01-28T19:39:47+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[4.294ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T19:47:34+07:00"}
+{"level":"trace","msg":"User already exists","time":"2025-01-28T19:47:34+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[4.502ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T19:49:14+07:00"}
+{"level":"trace","msg":"User already exists","time":"2025-01-28T19:49:14+07:00"}
+{"level":"trace","msg":"failed to connect to `host=localhost user=root database=go-clean-architecture`: dial error (dial tcp 127.0.0.1:5432: connect: connection refused)","time":"2025-01-28T19:49:35+07:00"}
+{"level":"fatal","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T19:55:43+07:00"}
+{"level":"fatal","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T19:56:35+07:00"}
+{"level":"fatal","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T19:57:19+07:00"}
+{"level":"fatal","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T19:57:33+07:00"}
+{"level":"info","msg":"dsd","time":"2025-01-28T19:58:28+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T19:59:14+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T19:59:42+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T20:00:29+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T20:00:32+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[9.073ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T20:00:39+07:00"}
+{"level":"trace","msg":"User already exists","time":"2025-01-28T20:00:39+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T20:00:59+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T20:01:00+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[4.137ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T20:01:06+07:00"}
+{"level":"trace","msg":"User already exists","time":"2025-01-28T20:01:06+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T20:01:09+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T20:02:20+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[6.670ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T20:02:33+07:00"}
+{"level":"trace","msg":"User already exists","time":"2025-01-28T20:02:33+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[1.485ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T20:02:45+07:00"}
+{"level":"trace","msg":"User already exists","time":"2025-01-28T20:02:45+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T20:02:46+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T20:02:53+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[2.632ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T20:03:06+07:00"}
+{"level":"trace","msg":"User already exists","time":"2025-01-28T20:03:06+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T20:03:06+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T20:04:19+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T20:04:31+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T20:04:32+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[4.704ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T20:04:33+07:00"}
+{"level":"trace","msg":"User already exists","time":"2025-01-28T20:04:33+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T20:08:26+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T22:23:22+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[6.336ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T22:23:25+07:00"}
+{"level":"trace","msg":"code 409 status Conflict errors User already exists","time":"2025-01-28T22:23:25+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T22:23:40+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T22:23:42+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[4.101ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T22:23:44+07:00"}
+{"level":"trace","msg":"User already exists","time":"2025-01-28T22:23:44+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T22:23:48+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T22:35:17+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[5.469ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T22:35:21+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:13\n[6.193ms] [rows:1] INSERT INTO \"users\" (\"name\",\"email\",\"photo\",\"email_verified_at\",\"password\",\"created_at\",\"updated_at\") VALUES ($1$,$2$,$3$,$4$,$5$,$6$,$7$) RETURNING \"id\"","time":"2025-01-28T22:35:21+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T22:36:39+07:00"}
+{"level":"info","msg":"starting server with graceful shutdown on: 3000","time":"2025-01-28T22:37:13+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:30\n[4.592ms] [rows:1] SELECT count(*) FROM \"users\" WHERE email = $1$","time":"2025-01-28T22:37:17+07:00"}
+{"level":"trace","msg":"/Users/dickidarmawansaputra/Herd/go-clean-architecture/internal/repository/repository.go:13\n[4.091ms] [rows:1] INSERT INTO \"users\" (\"name\",\"email\",\"photo\",\"email_verified_at\",\"password\",\"created_at\",\"updated_at\") VALUES ($1$,$2$,$3$,$4$,$5$,$6$,$7$) RETURNING \"id\"","time":"2025-01-28T22:37:18+07:00"}
+{"level":"info","msg":"fiber was successfully shutdown.","time":"2025-01-28T22:37:25+07:00"}
