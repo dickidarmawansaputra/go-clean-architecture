@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/dickidarmawansaputra/go-clean-architecture/internal/exception"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/model"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/usecase"
 	"github.com/gofiber/fiber/v2"
@@ -20,7 +21,7 @@ func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	request := new(model.RegisterRequest)
 
 	if err := ctx.BodyParser(request); err != nil {
-		return err
+		return exception.Error(fiber.ErrBadRequest, err.Error())
 	}
 
 	response, err := c.UseCase.Register(ctx, request)
@@ -28,9 +29,5 @@ func (c *AuthController) Register(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"code":   fiber.StatusOK,
-		"status": fiber.NewError(fiber.StatusOK).Message,
-		"data":   response,
-	})
+	return model.WebResponse(ctx, model.StatusCreated, response)
 }
