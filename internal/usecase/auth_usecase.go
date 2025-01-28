@@ -35,7 +35,7 @@ func (u *AuthUseCase) Register(ctx *fiber.Ctx, request *model.RegisterRequest) (
 	defer tx.Rollback()
 
 	if err := u.Validate.Struct(request); err != nil {
-		return nil, exception.Validate(fiber.ErrBadRequest, err)
+		return nil, exception.Validate(fiber.ErrUnprocessableEntity, err)
 	}
 
 	user := &entity.User{
