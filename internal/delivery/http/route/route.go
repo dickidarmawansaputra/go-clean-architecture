@@ -12,14 +12,17 @@ type RouteConfig struct {
 
 func Router(config *RouteConfig) {
 	route := config.App.Group("/api")
-	UnprotectedRoute(config, route)
-	ProtectedRoute(config, route)
+
+	config.UnprotectedRoute(route)
+	config.ProtectedRoute(route)
 }
 
-func UnprotectedRoute(config *RouteConfig, route fiber.Router) {
+func (r *RouteConfig) UnprotectedRoute(route fiber.Router) {
+	auth := route.Group("/auth")
 
+	auth.Post("/register", r.AuthController.Register)
 }
 
-func ProtectedRoute(config *RouteConfig, route fiber.Router) {
+func (r *RouteConfig) ProtectedRoute(route fiber.Router) {
 
 }
