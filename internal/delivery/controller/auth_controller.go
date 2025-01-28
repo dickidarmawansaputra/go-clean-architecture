@@ -43,3 +43,18 @@ func (c *AuthController) Register(ctx *fiber.Ctx) error {
 
 	return model.WebResponse(ctx, model.StatusCreated, response)
 }
+
+func (c *AuthController) Login(ctx *fiber.Ctx) error {
+	request := new(model.LoginRequest)
+
+	if err := ctx.BodyParser(request); err != nil {
+		return exception.Error(fiber.ErrBadRequest, err.Error())
+	}
+
+	response, err := c.UseCase.Login(ctx, request)
+	if err != nil {
+		return err
+	}
+
+	return model.WebResponse(ctx, model.StatusOK, response)
+}
