@@ -31,3 +31,7 @@ func (r *Repository[T]) CountByField(db *gorm.DB, ctx *fiber.Ctx, entity *T, fie
 
 	return total, err
 }
+
+func (r *Repository[T]) FindByField(db *gorm.DB, ctx *fiber.Ctx, entity *T, field string, value any) error {
+	return db.WithContext(ctx.UserContext()).Where(fmt.Sprintf("%s = ?", field), value).Take(&entity).Error
+}

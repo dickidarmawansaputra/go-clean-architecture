@@ -22,3 +22,7 @@ func (r *UserRepository) CheckUserExists(db *gorm.DB, ctx *fiber.Ctx, entity *en
 
 	return false
 }
+
+func (r *UserRepository) FindUserByEmail(db *gorm.DB, ctx *fiber.Ctx, entity *entity.User, email string) error {
+	return r.FindByField(db, ctx, entity, "email", email)
+}
