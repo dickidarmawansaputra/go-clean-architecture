@@ -29,6 +29,7 @@ func (r *RouteConfig) UnprotectedRoute(route fiber.Router) {
 	// auth routes
 	auth := route.Group("/auth")
 	auth.Post("/register", r.AuthController.Register)
+	auth.Post("/login", r.AuthController.Login)
 }
 
 func (r *RouteConfig) ProtectedRoute(route fiber.Router) {
