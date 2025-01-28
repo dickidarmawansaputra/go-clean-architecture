@@ -7,6 +7,7 @@ import (
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/usecase"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/swagger"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
@@ -16,6 +17,7 @@ type BootstrapConfig struct {
 	Config   *viper.Viper
 	DB       *gorm.DB
 	Validate *validator.Validate
+	Swagger  *swagger.Config
 }
 
 func Bootstrap(config *BootstrapConfig) {
@@ -28,6 +30,7 @@ func Bootstrap(config *BootstrapConfig) {
 	// route config
 	routeConfig := route.RouteConfig{
 		App:            config.App,
+		Swagger:        config.Swagger,
 		AuthController: controller.NewAuthController(authUseCase),
 	}
 

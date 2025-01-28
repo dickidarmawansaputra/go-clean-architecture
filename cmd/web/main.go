@@ -12,6 +12,16 @@ import (
 	"github.com/spf13/viper"
 )
 
+// @title			Go Clean Architecture With Fiber
+// @version		1.0.0
+// @description	Go Clean Architecture With Fiber Framework
+// @termsOfService	http://swagger.io/terms/
+// @contact.name	API Support
+// @contact.email	fiber@swagger.io
+// @license.name	Apache 2.0
+// @license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+// @host			localhost:3000
+// @BasePath		/
 func main() {
 	ctx := context.Background()
 	cfg := config.NewConfig()
@@ -23,6 +33,7 @@ func main() {
 		Config:   cfg,
 		DB:       config.NewDatabase(cfg, log),
 		Validate: config.NewValidator(),
+		Swagger:  config.NewSwagger(cfg),
 	})
 
 	gracefulShutdown(ctx, app, cfg, log)
