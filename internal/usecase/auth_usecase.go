@@ -1,7 +1,9 @@
 package usecase
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/entity"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/exception"
@@ -99,4 +101,65 @@ func (u *AuthUseCase) Login(ctx *fiber.Ctx, request *model.LoginRequest) (*model
 	}
 
 	return &model.AuthResponse{Token: token}, nil
+}
+
+func (u *AuthUseCase) UpdateUserProfile(ctx *fiber.Ctx, request *model.UpdateUserProfileRequest) (*model.UserResponse, error) {
+	tx := u.DB.Begin()
+	defer tx.Rollback()
+
+	if err := u.Validate.Struct(request); err != nil {
+		return nil, exception.Validate(fiber.ErrUnprocessableEntity, err)
+	}
+
+	user := new(entity.User)
+	if err := u.UserRepository.FindById(tx, ctx, user, request.ID); err != nil {
+		return nil, exception.Error(fiber.ErrNotFound, err.Error())
+	}
+
+	if request.Name != "" {
+		user.Name = request.Name
+	}
+
+	if request.Password != "" {
+		hashedPassword, err := password.Hash(request.Password)
+		if err != nil {
+			return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
+		}
+		user.Password = hashedPassword
+	}
+
+	file, err := ctx.FormFile("photo")
+	if err == nil {
+		mimeType := file.Header.Get("Content-Type")
+		if mimeType != "image/jpeg" && mimeType != "image/png" && mimeType != "image/webp" {
+			return nil, exception.Error(fiber.ErrUnprocessableEntity, "The file must be of the type png, jpeg/jpg, webp")
+		}
+
+		path := "storage/public/user/"
+		if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+			err := os.Mkdir(path, os.ModePerm)
+			if err != nil {
+				return nil, exception.Error(fiber.ErrInternalServerError, "Failed to create directory")
+			}
+		}
+
+		filePath := path + file.Filename
+		if err := ctx.SaveFile(file, filePath); err != nil {
+			return nil, exception.Error(fiber.ErrInternalServerError, "Failed to upload photo")
+		}
+
+		user.Photo = filePath
+	}
+
+	if err := u.UserRepository.Update(tx, ctx, user, request.ID); err != nil {
+		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
+	}
+
+	user.Photo = ctx.BaseURL() + "/api/" + user.Photo
+
+	return model.UserResource(user), nil
 }

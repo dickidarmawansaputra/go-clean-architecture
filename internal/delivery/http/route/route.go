@@ -1,6 +1,8 @@
 package route
 
 import (
+	"strings"
+
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/http/controller"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/http/middleware"
 	"github.com/gofiber/fiber/v2"
@@ -29,6 +31,10 @@ func (r *RouteConfig) UnprotectedRoute(route fiber.Router) {
 	// swagger route
 	route.Get("/docs/*", swagger.New(*r.Swagger))
 
+	route.Get("/storage/public/:filePath/:fileName", func(ctx *fiber.Ctx) error {
+		return ctx.SendFile(strings.TrimPrefix(ctx.OriginalURL(), "/api/"))
+	})
+
 	// auth routes
 	auth := route.Group("/auth")
 	auth.Post("/register", r.AuthController.Register)
@@ -41,4 +47,5 @@ func (r *RouteConfig) ProtectedRoute(route fiber.Router) {
 	// user profile routes
 	auth := route.Group("/auth")
 	auth.Get("/profile", r.AuthController.GetUserProfile)
+	auth.Patch("/profile", r.AuthController.UpdateUserProfile)
 }

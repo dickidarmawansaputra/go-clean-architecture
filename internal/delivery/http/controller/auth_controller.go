@@ -32,7 +32,6 @@ func NewAuthController(useCase *usecase.AuthUseCase) *AuthController {
 // @Router       /api/auth/register [post]
 func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	request := new(model.RegisterRequest)
-
 	if err := ctx.BodyParser(request); err != nil {
 		return exception.Error(fiber.ErrBadRequest, err.Error())
 	}
@@ -59,7 +58,6 @@ func (c *AuthController) Register(ctx *fiber.Ctx) error {
 // @Router       /api/auth/login [post]
 func (c *AuthController) Login(ctx *fiber.Ctx) error {
 	request := new(model.LoginRequest)
-
 	if err := ctx.BodyParser(request); err != nil {
 		return exception.Error(fiber.ErrBadRequest, err.Error())
 	}
@@ -82,10 +80,47 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 // @Failure 401 {object} model.Response{}
 // @Router       /api/auth/profile [get]
 func (c *AuthController) GetUserProfile(ctx *fiber.Ctx) error {
+	println("get user profile")
 	user, err := middleware.AuthUser(ctx, c.UseCase.DB, c.UseCase.UserRepository)
 	if err != nil {
 		return exception.Error(fiber.ErrUnauthorized, err.Error())
 	}
 
 	return model.WebResponse(ctx, model.StatusOK, user)
+}
+
+// @Summary      Update user profile
+// @Description  Update user profile
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Security Bearer
+// @Param name formData string false "Name"
+// @Param password formData string false "Password"
+// @Param photo formData file false "Photo"
+// @Success 200 {object} model.UserResponse{}
+// @Failure 401 {object} model.Response{}
+// @Failure 400 {object} model.Response{}
+// @Failure 422 {object} model.Response{}
+// @Failure 404 {object} model.Response{}
+// @Failure 500 {object} model.Response{}
+// @Router       /api/auth/profile [patch]
+func (c *AuthController) UpdateUserProfile(ctx *fiber.Ctx) error {
+	user, err := middleware.AuthUser(ctx, c.UseCase.DB, c.UseCase.UserRepository)
+	if err != nil {
+		return exception.Error(fiber.ErrUnauthorized, err.Error())
+	}
+
+	request := new(model.UpdateUserProfileRequest)
+	if err := ctx.BodyParser(request); err != nil {
+		return exception.Error(fiber.ErrBadRequest, err.Error())
+	}
+
+	request.ID = user.ID
+	response, err := c.UseCase.UpdateUserProfile(ctx, request)
+	if err != nil {
+		return err
+	}
+
+	return model.WebResponse(ctx, model.StatusOK, response)
 }
