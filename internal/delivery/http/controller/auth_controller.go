@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/http/middleware"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/exception"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/model"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/usecase"
@@ -69,4 +70,22 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 	}
 
 	return model.WebResponse(ctx, model.StatusOK, response)
+}
+
+// @Summary      Get user profile
+// @Description  Get user profile
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Security Bearer
+// @Success 200 {object} model.UserResponse{}
+// @Failure 401 {object} model.Response{}
+// @Router       /api/auth/profile [get]
+func (c *AuthController) GetUserProfile(ctx *fiber.Ctx) error {
+	user, err := middleware.AuthUser(ctx, c.UseCase.DB, c.UseCase.UserRepository)
+	if err != nil {
+		return exception.Error(fiber.ErrUnauthorized, err.Error())
+	}
+
+	return model.WebResponse(ctx, model.StatusOK, user)
 }

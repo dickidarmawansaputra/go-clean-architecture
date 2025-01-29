@@ -137,6 +137,27 @@ paths:
       summary: Login user
       tags:
       - Auth
+  /api/auth/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.Response'
+      security:
+      - Bearer: []
+      summary: Get user profile
+      tags:
+      - Auth
   /api/auth/register:
     post:
       consumes:
@@ -175,4 +196,10 @@ paths:
       summary: Register user
       tags:
       - Auth
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

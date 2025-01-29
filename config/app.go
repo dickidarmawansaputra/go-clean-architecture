@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/controller"
+	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/http/controller"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/http/route"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/repository"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/usecase"
@@ -30,6 +30,7 @@ func Bootstrap(config *BootstrapConfig) {
 	// route config
 	routeConfig := route.RouteConfig{
 		App:            config.App,
+		Config:         config.Config,
 		Swagger:        config.Swagger,
 		AuthController: controller.NewAuthController(authUseCase),
 	}
