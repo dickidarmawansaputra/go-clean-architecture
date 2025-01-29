@@ -18,6 +18,7 @@ type RouteConfig struct {
 	Config         *viper.Viper
 	Swagger        *swagger.Config
 	AuthController *controller.AuthController
+	UserController *controller.UserController
 }
 
 func Router(config *RouteConfig) {
@@ -48,4 +49,8 @@ func (r *RouteConfig) ProtectedRoute(route fiber.Router) {
 	auth := route.Group("/auth")
 	auth.Get("/profile", r.AuthController.GetUserProfile)
 	auth.Patch("/profile", r.AuthController.UpdateUserProfile)
+
+	// user routes
+	user := route.Group("/users")
+	user.Get("/:id", r.UserController.GetUser)
 }

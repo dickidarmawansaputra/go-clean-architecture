@@ -25,3 +25,7 @@ func UserResource(user *entity.User) *UserResponse {
 		UpdatedAt: user.UpdatedAt,
 	}
 }
+
+type GetUserRequest struct {
+	ID uint `json:"id" validate:"required"`
+}
