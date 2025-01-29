@@ -44,6 +44,12 @@ definitions:
       total_page:
         type: integer
     type: object
+  model.PaginationResponse:
+    properties:
+      data: {}
+      meta:
+        $ref: '#/definitions/model.MetaPagination'
+    type: object
   model.RegisterRequest:
     properties:
       email:
@@ -245,6 +251,38 @@ paths:
       summary: Register user
       tags:
       - Auth
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Get list of user
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Page Size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.PaginationResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Response'
+      security:
+      - Bearer: []
+      summary: Get all user
+      tags:
+      - User
   /api/users/{id}:
     get:
       consumes:

@@ -48,3 +48,30 @@ func (c *UserController) GetUser(ctx *fiber.Ctx) error {
 
 	return model.WebResponse(ctx, model.StatusOK, response)
 }
+
+// @Summary      Get all user
+// @Description  Get list of user
+// @Tags         User
+// @Accept       json
+// @Produce      json
+// @Security Bearer
+// @Param page query int false "Page"
+// @Param page_size query int false "Page Size"
+// @Success 200 {array} model.PaginationResponse{}
+// @Failure 500 {object} model.Response{}
+// @Router       /api/users [get]
+func (c *UserController) GetAllUser(ctx *fiber.Ctx) error {
+	page := ctx.QueryInt("page", 1)
+	pageSize := ctx.QueryInt("page_size", 10)
+
+	request := new(model.GetAllUserRequest)
+	request.Page = page
+	request.PageSize = pageSize
+
+	response, err := c.UseCase.GetAllUser(ctx, request)
+	if err != nil {
+		return err
+	}
+
+	return model.PageResponse(ctx, model.StatusOK, response)
+}

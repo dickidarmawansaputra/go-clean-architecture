@@ -43,3 +43,33 @@ func (u *UserUseCase) GetUserById(ctx *fiber.Ctx, request *model.GetUserRequest)
 
 	return model.UserResource(user), nil
 }
+
+func (u *UserUseCase) GetAllUser(ctx *fiber.Ctx, request *model.GetAllUserRequest) (*model.PaginationResponse, error) {
+	tx := u.DB.Begin()
+	defer tx.Rollback()
+
+	user := new([]entity.User)
+
+	users, meta, err := u.UserRepository.Paginate(tx, ctx, user, request.Page, request.PageSize)
+	if err != nil {
+		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
+	}
+
+	responses := make([]model.UserResponse, len(users))
+	for i, user := range users {
+		responses[i] = *model.UserResource(&user)
+	}
+
+	return &model.PaginationResponse{Data: responses, Meta: meta}, nil
+
+	// responses := make([]model.UserResponse, len(users))
+	// for i, user := range users {
+	// 	responses[i] = *model.UserResource(&user)
+	// }
+
+	// return &repository.Pagination{Data: responses, Meta: meta}, nil
+}

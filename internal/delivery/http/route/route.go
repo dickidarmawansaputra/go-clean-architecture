@@ -52,5 +52,6 @@ func (r *RouteConfig) ProtectedRoute(route fiber.Router) {
 
 	// user routes
 	user := route.Group("/users")
+	user.Get("/", r.UserController.GetAllUser)
 	user.Get("/:id", r.UserController.GetUser)
 }

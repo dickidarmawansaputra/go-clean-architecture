@@ -29,3 +29,8 @@ func UserResource(user *entity.User) *UserResponse {
 type GetUserRequest struct {
 	ID uint `json:"id" validate:"required"`
 }
+
+type GetAllUserRequest struct {
+	Page     int
+	PageSize int
+}

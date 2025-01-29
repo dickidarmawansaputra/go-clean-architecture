@@ -19,6 +19,11 @@ type Response struct {
 	Errors any             `json:"errors,omitempty"`
 }
 
+type PaginationResponse struct {
+	Data any             `json:"data,omitempty"`
+	Meta *MetaPagination `json:"meta,omitempty"`
+}
+
 type MetaPagination struct {
 	Pagination *PaginationMetaData `json:"pagination,omitempty"`
 }
@@ -33,8 +38,8 @@ type PaginationMetaData struct {
 }
 
 type PaginationLink struct {
-	NextPage     string `json:"next_page"`
-	PreviousPage string `json:"previous_page"`
+	NextPage     string `json:"next_page,omitempty"`
+	PreviousPage string `json:"previous_page,omitempty"`
 }
 
 func WebResponse(ctx *fiber.Ctx, status *fiber.Error, model any) error {
@@ -42,6 +47,17 @@ func WebResponse(ctx *fiber.Ctx, status *fiber.Error, model any) error {
 		Code:   status.Code,
 		Status: status.Message,
 		Data:   model,
+	})
+}
+
+func PageResponse(ctx *fiber.Ctx, status *fiber.Error, model *PaginationResponse) error {
+	return ctx.Status(status.Code).JSON(&Response{
+		Code:   status.Code,
+		Status: status.Message,
+		Data:   model.Data,
+		Meta: &MetaPagination{
+			Pagination: model.Meta.Pagination,
+		},
 	})
 }
 
