@@ -1,6 +1,8 @@
 # Go Clean Architecture With Fiber
 
-<p>Learn Go Clean Architecture with Fiber Framework</p>
+![Go](go.jpeg)
+
+<p>This repository is implementation of Go Clean Code Architecture using Fiber Framework</p>
 
 ## HTTP Methods for RESTful APIs
 
@@ -28,21 +30,18 @@
 | 500 Internal Server Error | Server encountered an error.                      |
 | 503 Service Unavailable   | Server temporarily unavailable.                   |
 
-## Pattern
-
 ## Tech Stack & Tools
 
-- Framework: Fiber
-- Git Convention: Husky Hooks
-- Database: PostgreSQL
-- ORM: GORM
-- Config: Viper
-- Validator: Go Validator
-- Log: Logrus
-- Test: Testify
-- APIs Docs: Swagger
-- Container: Docker
+- Framework: [Fiber](https://gofiber.io)
+- Database: [PostgreSQL](https://github.com/go-gorm/postgres)
+- ORM: [GORM](https://gorm.io)
+- Config: [Viper](https://github.com/spf13/viper)
+- Validator: [Go Validator](https://github.com/go-playground/validator)
+- Log: [Logrus](https://github.com/sirupsen/logrus)
+- Test: [Testify](https://github.com/stretchr/testify)
+- APIs Docs: [Swagger](https://github.com/gofiber/swagger)
+- Container: [Docker](https://www.docker.com)
 
 ## Author
 
-Dicki D. Saputra
+[Dicki D. Saputra](http://github.com/dickidarmawansaputra)
