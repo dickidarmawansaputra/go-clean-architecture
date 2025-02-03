@@ -1,10 +1,13 @@
+### Upload
+GET http://localhost:3000
+
 ### Register
 POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "name": "Hujan",
-    "email": "aku@mail.com",
+    "name": "Dicki Darmawan Saputra",
+    "email": "senin8@mail.com",
     "password": "rahasia"
 }
 
@@ -35,6 +38,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzgxNzgyN
 GET  http://localhost:3000/api/users/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzgxNzgyNjYsImlkIjoxNH0.YtRn-sAJbMgLayrqLC9W0e1meK35RqnvjMywn-LqoYo
 
+### Delete user by id
+DELETE http://localhost:3000/api/users/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzg2Nzc4OTIsImlkIjoyNX0.0rBDbnFF623ryC1cqXCittvBBLcNykpVWrOQNatBHM0
+
 ### Get all user
-GET  http://localhost:3000/api/users?page=1&page_size=2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzgxNzgyNjYsImlkIjoxNH0.YtRn-sAJbMgLayrqLC9W0e1meK35RqnvjMywn-LqoYo
+GET  http://localhost:3000/api/users/?page=3&page_size=10
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzg2NzMwNjIsImlkIjoyNX0.ihxpIzGwPiWBzoYEkmrDwqFXk5W8BLVwyLzSJKWzwgM

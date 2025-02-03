@@ -5,6 +5,7 @@ import (
 
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/http/controller"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/delivery/http/middleware"
+	"github.com/dickidarmawansaputra/go-clean-architecture/internal/lib/health"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
@@ -22,6 +23,11 @@ type RouteConfig struct {
 }
 
 func Router(config *RouteConfig) {
+	// root endpoint
+	config.App.Get("/", func(ctx *fiber.Ctx) error {
+		return health.Status(ctx)
+	})
+
 	route := config.App.Group("/api").Use(recover.New(), cors.New(), healthcheck.New())
 
 	config.UnprotectedRoute(route)
@@ -54,4 +60,6 @@ func (r *RouteConfig) ProtectedRoute(route fiber.Router) {
 	user := route.Group("/users")
 	user.Get("/", r.UserController.GetAllUser)
 	user.Get("/:id", r.UserController.GetUser)
+	user.Patch("/:id", r.UserController.UpdateUser)
+	user.Delete("/:id", r.UserController.DeleteUser)
 }

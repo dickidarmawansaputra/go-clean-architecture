@@ -27,10 +27,6 @@ func (s StorageType) String() string {
 	}
 }
 
-type StorageMimeType struct {
-	MimeType []string
-}
-
 func CreateStorageDirectory(storageType StorageType, directoryName string) (string, error) {
 	path := fmt.Sprintf("%s%s/", storageType.String(), directoryName)
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {

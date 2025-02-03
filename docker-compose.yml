@@ -1,0 +1,21 @@
+services:
+  go-clean-architecture:
+    container_name: go-clean-architecture
+    image: dickids/go-clean-architecture:1.0.0
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "3000:80"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}

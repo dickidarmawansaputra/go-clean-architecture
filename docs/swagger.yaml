@@ -60,6 +60,7 @@ definitions:
         type: string
       password:
         maxLength: 255
+        minLength: 3
         type: string
     required:
     - email
@@ -251,53 +252,6 @@ paths:
       summary: Register user
       tags:
       - Auth
-  /api/user/{id}:
-    patch:
-      consumes:
-      - application/json
-      description: Update user by id
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Name
-        in: formData
-        name: name
-        type: string
-      - description: Password
-        in: formData
-        name: password
-        type: string
-      - description: Photo
-        in: formData
-        name: photo
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.UserResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/model.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/model.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/model.Response'
-      security:
-      - Bearer: []
-      summary: Update user
-      tags:
-      - User
   /api/users:
     get:
       consumes:
@@ -334,7 +288,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Delete user account
+      description: Delete user account by user id
       parameters:
       - description: User ID
         in: path
@@ -348,6 +302,10 @@ paths:
           description: No Content
           schema:
             $ref: '#/definitions/model.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Response'
         "401":
           description: Unauthorized
           schema:
@@ -368,7 +326,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get user by id
+      description: Get user by user id
       parameters:
       - description: User ID
         in: path
@@ -405,6 +363,60 @@ paths:
       security:
       - Bearer: []
       summary: Get user
+      tags:
+      - User
+    patch:
+      consumes:
+      - application/json
+      description: Update user by user id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Name
+        in: formData
+        name: name
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        type: string
+      - description: Photo
+        in: formData
+        name: photo
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Response'
+      security:
+      - Bearer: []
+      summary: Update user
       tags:
       - User
 securityDefinitions:
