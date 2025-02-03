@@ -1,6 +1,7 @@
 package config
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -11,7 +12,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func NewDatabase(config *viper.Viper, log *logrus.Logger) *gorm.DB {
+func NewDatabase(ctx context.Context, config *viper.Viper, log *logrus.Logger) *gorm.DB {
 	host := config.GetString("DB_HOST")
 	username := config.GetString("DB_USER")
 	password := config.GetString("DB_PASSWORD")
@@ -35,14 +36,14 @@ func NewDatabase(config *viper.Viper, log *logrus.Logger) *gorm.DB {
 		}),
 	})
 	if err != nil {
-		log.Fatalf("failed to open connection: %v", err)
-		panic(err)
+		log.WithContext(ctx).Panicf("failed to open connection: %v", err.Error())
+		panic(err.Error())
 	}
 
 	connection, err := db.DB()
 	if err != nil {
-		log.Fatalf("connection failed: %v", err)
-		panic(err)
+		log.WithContext(ctx).Panicf("connection failed: %v", err.Error())
+		panic(err.Error())
 	}
 
 	connection.SetMaxIdleConns(maxIdleConnection)

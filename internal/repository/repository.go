@@ -47,18 +47,23 @@ func (r *Repository[T]) Count(db *gorm.DB, ctx *fiber.Ctx, entity *T) (int64, er
 
 func (r *Repository[T]) Paginate(db *gorm.DB, ctx *fiber.Ctx, entity *[]T, page int, pageSize int) ([]T, *model.MetaPagination, error) {
 	offset := (page - 1) * pageSize
-
 	err := db.WithContext(ctx.UserContext()).Limit(pageSize).Offset(offset).Find(&entity).Error
 	if err != nil {
 		return nil, nil, err
 	}
 
 	total, _ := r.Count(db, ctx, new(T))
+	count := len(*entity)
 	totalPage := int(math.Ceil(float64(total / int64(pageSize))))
 
-	nextPage := page + 1
-	if pageSize >= int(total) {
+	var nextPage int
+	var prevPage int
+	if count < pageSize {
 		nextPage = 0
+		prevPage = totalPage
+	} else {
+		nextPage = page + 1
+		prevPage = page - 1
 	}
 
 	var nextLink string
@@ -66,15 +71,14 @@ func (r *Repository[T]) Paginate(db *gorm.DB, ctx *fiber.Ctx, entity *[]T, page 
 		nextLink = fmt.Sprintf("%s%s?page=%d&page_size=%d", ctx.BaseURL(), ctx.Route().Path, nextPage, pageSize)
 	}
 
-	previousPage := page - 1
 	var prevLink string
-	if previousPage != 0 {
-		prevLink = fmt.Sprintf("%s%s?page=%d&page_size=%d", ctx.BaseURL(), ctx.Route().Path, previousPage, pageSize)
+	if prevPage != 0 {
+		prevLink = fmt.Sprintf("%s%s?page=%d&page_size=%d", ctx.BaseURL(), ctx.Route().Path, prevPage, pageSize)
 	}
 
 	meta := &model.PaginationMetaData{
 		Total:       int(total),
-		Count:       len(*entity),
+		Count:       count,
 		PerPage:     pageSize,
 		CurrentPage: page,
 		TotalPage:   totalPage,

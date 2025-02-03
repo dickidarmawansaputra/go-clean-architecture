@@ -36,10 +36,9 @@ func AuthUser(ctx *fiber.Ctx, db *gorm.DB, repository *repository.UserRepository
 	defer tx.Rollback()
 
 	user := new(entity.User)
-
 	if err := repository.FindById(db, ctx, user, uint(id)); err != nil {
 		return nil, err
 	}
 
-	return model.UserResource(user), nil
+	return model.UserResource(ctx, user), nil
 }

@@ -1,14 +1,12 @@
 package usecase
 
 import (
-	"errors"
-	"fmt"
-	"os"
-
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/entity"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/exception"
+	"github.com/dickidarmawansaputra/go-clean-architecture/internal/lib/avatar"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/lib/jwt"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/lib/password"
+	"github.com/dickidarmawansaputra/go-clean-architecture/internal/lib/storage"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/model"
 	"github.com/dickidarmawansaputra/go-clean-architecture/internal/repository"
 	"github.com/go-playground/validator/v10"
@@ -41,23 +39,27 @@ func (u *AuthUseCase) Register(ctx *fiber.Ctx, request *model.RegisterRequest) (
 		return nil, exception.Validate(fiber.ErrUnprocessableEntity, err)
 	}
 
-	user := &entity.User{
-		Name:     request.Name,
-		Email:    request.Email,
-		Password: request.Password,
-		Photo:    fmt.Sprintf("https://ui-avatars.com/api/?name=%s", request.Name),
-	}
+	user := new(entity.User)
 
 	if userExists := u.UserRepository.CheckUserExists(tx, ctx, user, request.Email); userExists {
 		return nil, exception.Error(fiber.ErrConflict, "User already exists")
 	}
 
-	hashedPassword, err := password.Hash(user.Password)
+	hashedPassword, err := password.Hash(request.Password)
 	if err != nil {
 		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
 	}
 
+	user.Name = request.Name
+	user.Email = request.Email
 	user.Password = hashedPassword
+
+	avatar, err := avatar.Generate(request.Name)
+	if err != nil {
+		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
+	}
+
+	user.Photo = avatar
 
 	if err := u.UserRepository.Create(tx, ctx, user); err != nil {
 		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
@@ -67,7 +69,7 @@ func (u *AuthUseCase) Register(ctx *fiber.Ctx, request *model.RegisterRequest) (
 		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
 	}
 
-	return model.UserResource(user), nil
+	return model.UserResource(ctx, user), nil
 }
 
 func (u *AuthUseCase) Login(ctx *fiber.Ctx, request *model.LoginRequest) (*model.AuthResponse, error) {
@@ -103,7 +105,7 @@ func (u *AuthUseCase) Login(ctx *fiber.Ctx, request *model.LoginRequest) (*model
 	return &model.AuthResponse{Token: token}, nil
 }
 
-func (u *AuthUseCase) UpdateUserProfile(ctx *fiber.Ctx, request *model.UpdateUserProfileRequest) (*model.UserResponse, error) {
+func (u *AuthUseCase) UpdateUserProfile(ctx *fiber.Ctx, request *model.UpdateUserRequest) (*model.UserResponse, error) {
 	tx := u.DB.Begin()
 	defer tx.Rollback()
 
@@ -125,30 +127,18 @@ func (u *AuthUseCase) UpdateUserProfile(ctx *fiber.Ctx, request *model.UpdateUse
 		if err != nil {
 			return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
 		}
+
 		user.Password = hashedPassword
 	}
 
 	file, err := ctx.FormFile("photo")
 	if err == nil {
-		mimeType := file.Header.Get("Content-Type")
-		if mimeType != "image/jpeg" && mimeType != "image/png" && mimeType != "image/webp" {
-			return nil, exception.Error(fiber.ErrUnprocessableEntity, "The file must be of the type png, jpeg/jpg, webp")
+		path, err := storage.UploadSingle(ctx, storage.Public, file, []string{"image/jpeg", "image/png", "image/webp"}, "user")
+		if err != nil {
+			return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
 		}
 
-		path := "storage/public/user/"
-		if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
-			err := os.Mkdir(path, os.ModePerm)
-			if err != nil {
-				return nil, exception.Error(fiber.ErrInternalServerError, "Failed to create directory")
-			}
-		}
-
-		filePath := path + file.Filename
-		if err := ctx.SaveFile(file, filePath); err != nil {
-			return nil, exception.Error(fiber.ErrInternalServerError, "Failed to upload photo")
-		}
-
-		user.Photo = filePath
+		user.Photo = path
 	}
 
 	if err := u.UserRepository.Update(tx, ctx, user, request.ID); err != nil {
@@ -159,7 +149,5 @@ func (u *AuthUseCase) UpdateUserProfile(ctx *fiber.Ctx, request *model.UpdateUse
 		return nil, exception.Error(fiber.ErrInternalServerError, err.Error())
 	}
 
-	user.Photo = ctx.BaseURL() + "/api/" + user.Photo
-
-	return model.UserResource(user), nil
+	return model.UserResource(ctx, user), nil
 }

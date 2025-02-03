@@ -35,7 +35,7 @@ func main() {
 	config.Bootstrap(&config.BootstrapConfig{
 		App:      app,
 		Config:   cfg,
-		DB:       config.NewDatabase(cfg, log),
+		DB:       config.NewDatabase(ctx, cfg, log),
 		Validate: config.NewValidator(),
 		Swagger:  config.NewSwagger(),
 	})
@@ -61,7 +61,7 @@ func gracefulShutdown(ctx context.Context, app *fiber.App, config *viper.Viper, 
 
 	<-ctx.Done()
 
-	if err := app.Shutdown(); err != nil {
+	if err := app.ShutdownWithContext(ctx); err != nil {
 		log.WithContext(ctx).Fatalf("failed to graceful shutdown: %v", err)
 		panic(err)
 	}

@@ -80,7 +80,6 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 // @Failure 401 {object} model.Response{}
 // @Router       /api/auth/profile [get]
 func (c *AuthController) GetUserProfile(ctx *fiber.Ctx) error {
-	println("get user profile")
 	user, err := middleware.AuthUser(ctx, c.UseCase.DB, c.UseCase.UserRepository)
 	if err != nil {
 		return exception.Error(fiber.ErrUnauthorized, err.Error())
@@ -99,8 +98,8 @@ func (c *AuthController) GetUserProfile(ctx *fiber.Ctx) error {
 // @Param password formData string false "Password"
 // @Param photo formData file false "Photo"
 // @Success 200 {object} model.UserResponse{}
-// @Failure 401 {object} model.Response{}
 // @Failure 400 {object} model.Response{}
+// @Failure 401 {object} model.Response{}
 // @Failure 422 {object} model.Response{}
 // @Failure 404 {object} model.Response{}
 // @Failure 500 {object} model.Response{}
@@ -111,7 +110,7 @@ func (c *AuthController) UpdateUserProfile(ctx *fiber.Ctx) error {
 		return exception.Error(fiber.ErrUnauthorized, err.Error())
 	}
 
-	request := new(model.UpdateUserProfileRequest)
+	request := new(model.UpdateUserRequest)
 	if err := ctx.BodyParser(request); err != nil {
 		return exception.Error(fiber.ErrBadRequest, err.Error())
 	}
