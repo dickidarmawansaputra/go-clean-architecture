@@ -54,7 +54,7 @@ func gracefulShutdown(ctx context.Context, app *fiber.App, config *viper.Viper, 
 		log.WithContext(ctx).Printf("starting server with graceful shutdown on: %d", port)
 		err := app.Listen(fmt.Sprintf(":%d", port))
 		if err != nil {
-			log.WithContext(ctx).Fatalf("failed to start server: %v", err)
+			log.WithContext(ctx).Panicf("failed to start server: %v", err)
 			panic(err)
 		}
 	}()
@@ -62,7 +62,7 @@ func gracefulShutdown(ctx context.Context, app *fiber.App, config *viper.Viper, 
 	<-ctx.Done()
 
 	if err := app.ShutdownWithContext(ctx); err != nil {
-		log.WithContext(ctx).Fatalf("failed to graceful shutdown: %v", err)
+		log.WithContext(ctx).Panicf("failed to graceful shutdown: %v", err)
 		panic(err)
 	}
 

@@ -7,18 +7,19 @@ services:
     env_file:
       - .env
     ports:
-      - 80:${APP_PORT}
+      - 3000:${APP_PORT}
     volumes:
       - fiber-app:/app
     networks:
       - application
     depends_on:
-      - postgres
-    command: ./fiber
+      postgres:
+        condition: service_healthy
+        restart: true
 
   postgres:
     container_name: postgres-db
-    image: postgres:17.2-alpine3.21
+    image: postgres:alpine3.21
     restart: always
     environment:
       - POSTGRES_USER=${DB_USER}
@@ -28,6 +29,12 @@ services:
       - 5432:${DB_PORT}
     volumes:
       - postgres-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     networks:
       - application
 
@@ -37,3 +44,4 @@ volumes:
 
 networks:
   application:
+    driver: bridge
