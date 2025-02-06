@@ -39,7 +39,7 @@ GET  http://localhost:3000/api/users/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzgxNzgyNjYsImlkIjoxNH0.YtRn-sAJbMgLayrqLC9W0e1meK35RqnvjMywn-LqoYo
 
 ### Delete user by id
-DELETE http://localhost:3000/api/users/2
+DELETE http://localhost:3000/api/users/4
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzg2Nzc4OTIsImlkIjoyNX0.0rBDbnFF623ryC1cqXCittvBBLcNykpVWrOQNatBHM0
 
 ### Get all user
