@@ -1,8 +1,7 @@
 # Go Clean Architecture With Fiber
+<p>This repository is Golang implementation of Clean Code Architecture using Fiber framework.</p>
 
 ![Go](go.jpeg)
-
-<p>This repository is implementation of Go Clean Code Architecture using Fiber Framework</p>
 
 ## HTTP Methods for RESTful APIs
 
@@ -38,7 +37,6 @@
 - Config: [Viper](https://github.com/spf13/viper)
 - Validator: [Go Validator](https://github.com/go-playground/validator)
 - Log: [Logrus](https://github.com/sirupsen/logrus)
-- Test: [Testify](https://github.com/stretchr/testify)
 - APIs Docs: [Swagger](https://github.com/gofiber/swagger)
 - Container: [Docker](https://www.docker.com)
 
